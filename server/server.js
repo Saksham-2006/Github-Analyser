@@ -1,10 +1,12 @@
 const express = require("express");
 const cors = require("cors");
+const connectDB = require("./config/db");
 require("dotenv").config();
 
 const githubRoutes = require("./routes/githubRoutes");
 
 const app = express();
+connectDB();
 
 const PORT = process.env.PORT || 5000;
 
