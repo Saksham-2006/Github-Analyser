@@ -382,10 +382,12 @@ async function fetchRestUser(username) {
 }
 
 // Full user data analysis
-async function getFullUserData(username) {
+async function getFullUserData(username, forceRefresh = false) {
   const cacheKey = `user:${username.toLowerCase()}:bundle`;
-  const cached = cache.get(cacheKey);
-  if (cached) return cached;
+  if (!forceRefresh) {
+    const cached = cache.get(cacheKey);
+    if (cached) return cached;
+  }
 
   try {
     const rawUser = await fetchGraphQLData(username);
@@ -572,13 +574,13 @@ async function getFullUserData(username) {
   }
 }
 
-async function getUser(username) {
-  const bundle = await getFullUserData(username);
+async function getUser(username, forceRefresh = false) {
+  const bundle = await getFullUserData(username, forceRefresh);
   return bundle.profile;
 }
 
-async function getDashboard(username) {
-  const bundle = await getFullUserData(username);
+async function getDashboard(username, forceRefresh = false) {
+  const bundle = await getFullUserData(username, forceRefresh);
   return {
     profile: bundle.profile,
     stats: bundle.stats,
@@ -589,8 +591,8 @@ async function getDashboard(username) {
   };
 }
 
-async function getRepositories(username) {
-  const bundle = await getFullUserData(username);
+async function getRepositories(username, forceRefresh = false) {
+  const bundle = await getFullUserData(username, forceRefresh);
   return {
     repositories: bundle.repositories,
     stats: {
@@ -604,8 +606,8 @@ async function getRepositories(username) {
   };
 }
 
-async function getActivity(username) {
-  const bundle = await getFullUserData(username);
+async function getActivity(username, forceRefresh = false) {
+  const bundle = await getFullUserData(username, forceRefresh);
   return {
     stats: bundle.stats,
     contributions: bundle.contributions,

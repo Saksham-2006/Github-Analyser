@@ -28,7 +28,7 @@ export async function fetchUserProfile(username) {
 
 export async function fetchUserDashboard(username) {
   const response = await fetch(
-    `${API_BASE_URL}/api/github/${encodeURIComponent(username.trim())}/dashboard`
+    `${API_BASE_URL}/api/github/${encodeURIComponent(username.trim())}/dashboard?fresh=true`
   );
   return handleResponse(response);
 }

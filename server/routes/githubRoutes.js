@@ -57,7 +57,35 @@ async function persistSnapshot(dashboardData) {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    // Create a new analytics snapshot every time the dashboard is fetched
+    // Check if the latest snapshot is identical to prevent spam
+    const lastSnapshot = await AnalyticsSnapshot.findOne({ profileId: savedProfile._id })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    const newRepos = stats.repositories || 0;
+    const newStars = stats.totalStars || 0;
+    const newForks = stats.totalForks || 0;
+    const newCommits = stats.totalCommits || 0;
+    const newCurrentStreak = stats.currentStreak || 0;
+    const newLongestStreak = stats.longestStreak || 0;
+    const newLangCount = stats.languageCount || 0;
+
+    if (lastSnapshot) {
+      const isIdentical = 
+        lastSnapshot.repositories === newRepos &&
+        lastSnapshot.totalStars === newStars &&
+        lastSnapshot.totalForks === newForks &&
+        lastSnapshot.totalCommits === newCommits &&
+        lastSnapshot.currentStreak === newCurrentStreak &&
+        lastSnapshot.longestStreak === newLongestStreak &&
+        lastSnapshot.languageCount === newLangCount;
+
+      if (isIdentical) {
+        return; // Data hasn't changed, skip creating a new snapshot
+      }
+    }
+
+    // Create a new analytics snapshot because data has changed or it's the first time
     await AnalyticsSnapshot.create({
       profileId: savedProfile._id,
       repositories: stats.repositories || 0,
@@ -96,9 +124,10 @@ router.get("/:username", async (req, res) => {
 // 2. Get full dashboard payload — also persists Profile + AnalyticsSnapshot
 router.get("/:username/dashboard", async (req, res) => {
   const { username } = req.params;
+  const forceRefresh = req.query.fresh === "true";
 
   try {
-    const dashboardData = await getDashboard(username);
+    const dashboardData = await getDashboard(username, forceRefresh);
 
     // Persist to MongoDB (non-blocking — response is not delayed)
     persistSnapshot(dashboardData);
