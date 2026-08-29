@@ -23,36 +23,36 @@ function GitHubSearch() {
     setLoading(true);
 
     try {
+      console.log("Checking username:", trimmedUsername);
+
       const response = await fetch(
-        `https://api.github.com/users/${encodeURIComponent(
+        `http://localhost:5000/api/github/${encodeURIComponent(
           trimmedUsername
         )}`
       );
 
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error("GitHub user not found.");
-        }
+      const result = await response.json();
 
-        if (response.status === 403) {
-          throw new Error(
-            "GitHub API rate limit reached. Please try again later."
-          );
-        }
+      console.log("Backend response:", result);
 
-        throw new Error("Unable to fetch GitHub profile.");
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "GitHub user not found."
+        );
       }
 
-      const user = await response.json();
-
-      // Username is valid.
-      // Send it to the Dashboard.
+      // Username is valid → go to dashboard
       navigate(
-        `/dashboard?username=${encodeURIComponent(user.login)}`
+        `/?username=${encodeURIComponent(
+          result.data.login
+        )}`
       );
-    } catch (err) {
+    } catch (error) {
+      console.error("Analyze error:", error);
+
       setError(
-        err.message || "Something went wrong. Please try again."
+        error.message ||
+          "Unable to analyze GitHub profile."
       );
     } finally {
       setLoading(false);
@@ -61,9 +61,7 @@ function GitHubSearch() {
 
   return (
     <div className="w-full">
-
       <form onSubmit={handleSubmit}>
-
         <div
           className={`flex items-center border p-2 backdrop-blur-md transition ${
             error
@@ -71,7 +69,6 @@ function GitHubSearch() {
               : "border-white/10 focus-within:border-[#5227FF]/60"
           }`}
         >
-
           {/* Search icon */}
           <div className="flex h-12 w-12 shrink-0 items-center justify-center">
             <Search
@@ -117,9 +114,7 @@ function GitHubSearch() {
               </>
             )}
           </button>
-
         </div>
-
       </form>
 
       {/* Error */}
@@ -135,7 +130,6 @@ function GitHubSearch() {
           Enter a public GitHub username to begin the analysis.
         </p>
       )}
-
     </div>
   );
 }

@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import Nav from "../components/Nav/Nav";
 import Loader from "../components/Loader/Loader"
 import ProfileCard from "../components/ProfileCard/ProfileCard";
@@ -7,7 +10,53 @@ import RecentActivity from "../components/RecentActivity/RecentActivity";
 import ContributionGrid from "../components/ContributionGrid/ContributionGrid";
 
 function Dashboard() {
-  const user = {
+  const [searchParams] = useSearchParams();
+
+  const username = searchParams.get("username");
+
+  const [realUser, setRealUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!username) {
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(
+          `http://localhost:5000/api/github/${encodeURIComponent(
+            username
+          )}`
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(
+            result.message || "Unable to fetch profile."
+          );
+        }
+
+        setRealUser(result.data);
+      } catch (error) {
+        setError(
+          error.message ||
+          "Unable to fetch GitHub profile."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [username]);
+
+  const demoUser = {
     login: "octocat",
     name: "The Octocat",
     avatar_url: "https://github.com/octocat.png",
@@ -17,6 +66,7 @@ function Dashboard() {
     following: 20,
     html_url: "https://github.com/octocat",
   };
+  const user = realUser || demoUser;
   const languages = [
     {
       language: "JavaScript",
@@ -52,6 +102,38 @@ function Dashboard() {
     date: `2026-08-${(index % 28) + 1}`,
     count: Math.floor(Math.random() * 15),
   }));
+  if (username && loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+
+          <Loader />
+
+          <p className="mt-4 text-sm text-neutral-500">
+            Analyzing @{username}...
+          </p>
+
+        </div>
+      </div>
+    );
+  }
+  if (username && error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center px-6">
+        <div className="text-center">
+
+          <h2 className="text-xl font-medium text-white">
+            Unable to analyze profile
+          </h2>
+
+          <p className="mt-3 text-sm text-neutral-500">
+            {error}
+          </p>
+
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex flex-col items-center">
@@ -79,7 +161,7 @@ function Dashboard() {
 
               <StatCard
                 title="Repositories"
-                value="42"
+                value={user.public_repos}
                 description="Public repositories"
               />
 
