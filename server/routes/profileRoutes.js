@@ -20,7 +20,7 @@ router.post("/save", async (req, res) => {
     const saved = await SavedProfile.findOneAndUpdate(
       { username: username.toLowerCase().trim() },
       { githubId, name, avatarUrl, profileUrl },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
+      { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
     );
 
     res.json({ success: true, data: saved });

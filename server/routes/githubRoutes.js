@@ -54,7 +54,7 @@ async function persistSnapshot(dashboardData) {
         followers: profile.followers,
         following: profile.following,
       },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
+      { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
     );
 
     // Check if the latest snapshot is identical to prevent spam
