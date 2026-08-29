@@ -1,0 +1,7 @@
+[build]
+  base    = "app"          # subfolder containing the React app
+  command = "npm run build"
+  publish = "dist"         # Vite output directory
+
+[build.environment]
+  NODE_VERSION = "20"
