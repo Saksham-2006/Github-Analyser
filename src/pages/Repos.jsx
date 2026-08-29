@@ -4,6 +4,7 @@ import RepoStats from "../components/RepoStats/RepoStats";
 import RepositorySearch from "../components/RepositorySearch/RepositorySearch";
 import RepositoryCard from "../components/RepositoryCard/RepositoryCard";
 import Loader3 from "../components/Loadre3/Loader3";
+import Pattern from "../components/Pattern/Pattern";
 
 function Repos() {
   const [search, setSearch] = useState("");
@@ -185,15 +186,13 @@ function Repos() {
       <section className="mx-10 mb-5">
         <Nav></Nav>
       </section>
-      <section className="border-t border-neutral-700">
-        <div className="flex">
-          <div className="w-[50%] border-r border-neutral-700 py-10 px-10">
-            <h1 className="text-6xl font-medium text-white pb-10"> Repositories </h1>
-            <p className="text-neutral-400">Explore the projects behind this developer's activity.</p>
-          </div>
-          <div className="w-[50%] p-10 flex justify-center items-center pb-20">
-            <Loader3></Loader3>
-          </div>
+      <section className="border-t border-neutral-700 flex">
+        <div className=" border-r border-neutral-700 py-10 px-10 w-[50%] flex flex-col justify-center">
+          <h1 className="text-6xl font-medium text-white pb-10"> Repositories </h1>
+          <p className="text-neutral-400">Explore the projects behind this developer's activity.</p>
+        </div>
+        <div className="w-[50%]">
+          <Pattern></Pattern>
         </div>
       </section>
       <section className="border-t border-neutral-700 border-b">
@@ -310,6 +309,7 @@ function Repos() {
         )}
 
       </section>
+
     </div>
   );
 }
