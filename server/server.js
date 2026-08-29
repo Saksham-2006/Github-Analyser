@@ -13,20 +13,19 @@ const PORT = process.env.PORT || 5000;
 
 // Allow requests from the deployed frontend or localhost in dev
 const allowedOrigins = [
-  process.env.CLIENT_URL,          // e.g. https://your-app.netlify.app
   "http://localhost:5173",
-  "http://localhost:3000",
+  process.env.FRONTEND_URL,
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (curl, Postman, server-to-server)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      callback(new Error(`CORS blocked: ${origin}`));
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS blocked: ${origin}`));
+      }
     },
-    credentials: true,
   })
 );
 app.use(express.json());
