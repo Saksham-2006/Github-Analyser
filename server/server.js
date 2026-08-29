@@ -13,25 +13,8 @@ connectDB();
 
 const PORT = process.env.PORT || 5000;
 
-// Allow requests from the deployed frontend or localhost in dev
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL,
-  "https://github-analyser-rho.vercel.app",
-].filter(Boolean);
-
-// Middleware MUST come before routes
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS blocked: ${origin}`));
-      }
-    },
-  })
-);
+// Allow requests from frontend (localhost & production)
+app.use(cors());
 
 app.use(express.json());
 
