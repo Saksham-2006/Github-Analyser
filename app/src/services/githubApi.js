@@ -46,3 +46,34 @@ export async function fetchUserActivity(username) {
   );
   return handleResponse(response);
 }
+
+// Analytics history — returns snapshots newest-first
+export async function fetchUserHistory(username) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/github/${encodeURIComponent(username.trim())}/history`
+  );
+  return handleResponse(response);
+}
+
+// Saved profiles
+export async function saveProfile(profileData) {
+  const response = await fetch(`${API_BASE_URL}/api/profiles/save`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(profileData),
+  });
+  return handleResponse(response);
+}
+
+export async function fetchSavedProfiles() {
+  const response = await fetch(`${API_BASE_URL}/api/profiles/saved`);
+  return handleResponse(response);
+}
+
+export async function deleteSavedProfile(username) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/profiles/saved/${encodeURIComponent(username.trim())}`,
+    { method: "DELETE" }
+  );
+  return handleResponse(response);
+}

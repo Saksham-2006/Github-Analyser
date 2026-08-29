@@ -1,5 +1,54 @@
+import { useEffect, useState } from "react";
+import { saveProfile, fetchSavedProfiles, deleteSavedProfile } from "../../services/githubApi";
+
 function ProfileCard({ user }) {
+  const [saveState, setSaveState] = useState("idle"); // "idle" | "saving" | "saved"
+
+  // On mount, check if this profile is already saved
+  useEffect(() => {
+    if (!user?.login) return;
+
+    fetchSavedProfiles()
+      .then((profiles) => {
+        const already = profiles.some(
+          (p) => p.username === user.login.toLowerCase()
+        );
+        if (already) setSaveState("saved");
+      })
+      .catch(() => {}); // non-fatal
+  }, [user?.login]);
+
   if (!user) return null;
+
+  const handleSave = async () => {
+    if (saveState === "saved" || saveState === "saving") return;
+
+    setSaveState("saving");
+    try {
+      await saveProfile({
+        username: user.login,
+        githubId: user.id,
+        name: user.name || user.login,
+        avatarUrl: user.avatar_url,
+        profileUrl: user.html_url,
+      });
+      setSaveState("saved");
+    } catch {
+      setSaveState("idle"); // revert so user can retry
+    }
+  };
+
+  const handleUnsave = async () => {
+    try {
+      await deleteSavedProfile(user.login);
+      setSaveState("idle");
+    } catch {
+      // silently ignore
+    }
+  };
+
+  const isSaved = saveState === "saved";
+  const isSaving = saveState === "saving";
 
   return (
     <div className="p-10">
@@ -64,15 +113,40 @@ function ProfileCard({ user }) {
 
         </div>
 
-        {/* GitHub profile button */}
-        <a
-          href={user.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/10 hover:text-white"
-        >
-          View GitHub ↗
-        </a>
+        {/* Action buttons */}
+        <div className="flex shrink-0 gap-2">
+          {/* Save / Saved / Unsave button */}
+          {user.id && (
+            isSaved ? (
+              <button
+                onClick={handleUnsave}
+                title="Click to unsave"
+                className="group flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-400"
+              >
+                <span className="group-hover:hidden">✓ Saved</span>
+                <span className="hidden group-hover:inline">✕ Unsave</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex items-center gap-1.5 rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
+              >
+                {isSaving ? "Saving..." : "☆ Save Profile"}
+              </button>
+            )
+          )}
+
+          {/* GitHub profile button */}
+          <a
+            href={user.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/10 hover:text-white"
+          >
+            View GitHub ↗
+          </a>
+        </div>
 
       </div>
     </div>

@@ -8,6 +8,7 @@ import StatCard from "../components/StatCard/StatCard";
 import LanguageChart from "../components/LanguageChart/LanguageChart";
 import RecentActivity from "../components/RecentActivity/RecentActivity";
 import ContributionGrid from "../components/ContributionGrid/ContributionGrid";
+import DeveloperProgress from "../components/DeveloperProgress/DeveloperProgress";
 import { fetchUserDashboard } from "../services/githubApi";
 
 function Dashboard() {
@@ -194,6 +195,9 @@ function Dashboard() {
               />
             </div>
           </section>
+
+          {/* Developer Progress — only visible when real data is loaded */}
+          {isReal && <DeveloperProgress username={username} />}
           <section className="border-t border-b border-neutral-700 flex">
             <div className="w-[50%] border-r border-neutral-700">
               <LanguageChart data={languages} />

@@ -217,6 +217,7 @@ async function fetchGraphQLData(username) {
   const query = `
     query($login: String!) {
       user(login: $login) {
+        databaseId
         name
         login
         bio
@@ -391,6 +392,7 @@ async function getFullUserData(username) {
 
     // 1. Profile
     const profile = {
+      id: rawUser.databaseId,
       login: rawUser.login,
       name: rawUser.name || rawUser.login,
       avatar_url: rawUser.avatarUrl,

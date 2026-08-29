@@ -6,6 +6,9 @@ const {
   getActivity,
 } = require("../services/githubService");
 
+const Profile = require("../models/Profile");
+const AnalyticsSnapshot = require("../models/AnalyticsSnapshot");
+
 const router = express.Router();
 
 // Helper to handle async route errors cleanly
@@ -28,6 +31,53 @@ function errorHandler(res, error) {
   });
 }
 
+// Save profile + analytics snapshot to MongoDB (fire-and-forget, never blocks the response)
+async function persistSnapshot(dashboardData) {
+  try {
+    const { profile, stats, languages } = dashboardData;
+
+    // Require numeric githubId — skip if not present (e.g. REST fallback)
+    if (!profile.id) return;
+
+    // Upsert Profile by githubId
+    const savedProfile = await Profile.findOneAndUpdate(
+      { githubId: profile.id },
+      {
+        githubId: profile.id,
+        username: profile.login,
+        name: profile.name || profile.login,
+        avatarUrl: profile.avatar_url,
+        bio: profile.bio || "",
+        location: profile.location || "",
+        profileUrl: profile.html_url,
+        publicRepos: profile.public_repos,
+        followers: profile.followers,
+        following: profile.following,
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    // Create a new analytics snapshot every time the dashboard is fetched
+    await AnalyticsSnapshot.create({
+      profileId: savedProfile._id,
+      repositories: stats.repositories || 0,
+      totalStars: stats.totalStars || 0,
+      totalForks: stats.totalForks || 0,
+      totalCommits: stats.totalCommits || 0,
+      currentStreak: stats.currentStreak || 0,
+      longestStreak: stats.longestStreak || 0,
+      languageCount: stats.languageCount || 0,
+      languages: (languages || []).map((l) => ({
+        language: l.language,
+        percentage: l.percentage,
+      })),
+    });
+  } catch (err) {
+    // Non-fatal — log but don't crash the request
+    console.error("persistSnapshot error:", err.message);
+  }
+}
+
 // 1. Get basic user profile (backward compatibility)
 router.get("/:username", async (req, res) => {
   const { username } = req.params;
@@ -43,12 +93,16 @@ router.get("/:username", async (req, res) => {
   }
 });
 
-// 2. Get full dashboard payload (profile, stats, languages, recentActivity, contributions, trends)
+// 2. Get full dashboard payload — also persists Profile + AnalyticsSnapshot
 router.get("/:username/dashboard", async (req, res) => {
   const { username } = req.params;
 
   try {
     const dashboardData = await getDashboard(username);
+
+    // Persist to MongoDB (non-blocking — response is not delayed)
+    persistSnapshot(dashboardData);
+
     res.json({
       success: true,
       data: dashboardData,
@@ -83,6 +137,43 @@ router.get("/:username/activity", async (req, res) => {
       success: true,
       data: activityData,
     });
+  } catch (error) {
+    errorHandler(res, error);
+  }
+});
+
+// 5. Get analytics history for a username (newest first)
+router.get("/:username/history", async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const profile = await Profile.findOne({
+      username: username.toLowerCase().trim(),
+    });
+
+    if (!profile) {
+      return res.json({ success: true, data: [] });
+    }
+
+    const snapshots = await AnalyticsSnapshot.find({ profileId: profile._id })
+      .sort({ createdAt: -1 })
+      .limit(30)
+      .lean();
+
+    const data = snapshots.map((s) => ({
+      date: s.createdAt.toISOString().split("T")[0],
+      repositories: s.repositories,
+      stars: s.totalStars,
+      forks: s.totalForks,
+      commits: s.totalCommits,
+      currentStreak: s.currentStreak,
+      longestStreak: s.longestStreak,
+      languageCount: s.languageCount,
+      languages: s.languages,
+      createdAt: s.createdAt,
+    }));
+
+    res.json({ success: true, data });
   } catch (error) {
     errorHandler(res, error);
   }
