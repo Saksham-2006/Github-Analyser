@@ -26,3 +26,79 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: oklch(51.1% 0.262 276.966);
 }
+
+/* ── Chatbot Markdown Styles ── */
+.chatbot-markdown h1,
+.chatbot-markdown h2,
+.chatbot-markdown h3 {
+  font-weight: 600;
+  color: #fff;
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+.chatbot-markdown h1 { font-size: 1rem; }
+.chatbot-markdown h2 { font-size: 0.9rem; }
+.chatbot-markdown h3 { font-size: 0.85rem; }
+
+.chatbot-markdown p {
+  margin-bottom: 0.5rem;
+}
+.chatbot-markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.chatbot-markdown ul,
+.chatbot-markdown ol {
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.chatbot-markdown ul { list-style-type: disc; }
+.chatbot-markdown ol { list-style-type: decimal; }
+
+.chatbot-markdown li {
+  margin-bottom: 0.2rem;
+}
+
+.chatbot-markdown strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.chatbot-markdown code {
+  background: #262626;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #a78bfa;
+}
+
+.chatbot-markdown pre {
+  background: #171717;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.6rem;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+.chatbot-markdown pre code {
+  background: none;
+  padding: 0;
+  color: #d4d4d4;
+}
+
+.chatbot-markdown a {
+  color: #818cf8;
+  text-decoration: underline;
+}
+
+.chatbot-markdown blockquote {
+  border-left: 3px solid #5227FF;
+  padding-left: 0.75rem;
+  color: #a3a3a3;
+  margin: 0.5rem 0;
+}
+
+.chatbot-markdown hr {
+  border-color: #333;
+  margin: 0.75rem 0;
+}

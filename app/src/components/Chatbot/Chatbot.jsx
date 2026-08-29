@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import {
     MessageCircle,
     X,
@@ -11,6 +12,7 @@ function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef(null);
 
     const [messages, setMessages] = useState([
         {
@@ -22,10 +24,8 @@ function Chatbot() {
 
     const API_URL = import.meta.env.VITE_API_URL;
 
-    const sendMessage = async (e) => {
-        e.preventDefault();
-
-        const trimmedMessage = message.trim();
+    const handleSend = async (textToSubmit) => {
+        const trimmedMessage = textToSubmit.trim();
 
         if (!trimmedMessage || loading) return;
 
@@ -42,6 +42,9 @@ function Chatbot() {
         setLoading(true);
 
         try {
+            const searchParams = new URLSearchParams(window.location.search);
+            const contextUsername = searchParams.get("username");
+
             const response = await fetch(`${API_URL}/api/chat`, {
                 method: "POST",
                 headers: {
@@ -49,6 +52,7 @@ function Chatbot() {
                 },
                 body: JSON.stringify({
                     message: trimmedMessage,
+                    username: contextUsername,
                 }),
             });
 
@@ -81,6 +85,20 @@ function Chatbot() {
             setLoading(false);
         }
     };
+
+    const sendMessage = (e) => {
+        e.preventDefault();
+        handleSend(message);
+    };
+
+    const quickQuestions = [
+        "How can I improve my GitHub account?",
+        "How do I make open source contributions?",
+        "How to grow my GitHub followers?",
+        "How to make killer Readme Design?",
+        "Pinned Repo Strategy",
+        "How to gain Stars?"
+    ];
 
     return (
         <>
@@ -117,7 +135,7 @@ function Chatbot() {
                     </div>
 
                     {/* MESSAGES */}
-                    <div className="flex-1 space-y-4 overflow-y-auto p-4">
+                    <div className="flex-1 space-y-4 overflow-y-auto p-4" ref={messagesEndRef}>
 
                         {messages.map((msg, index) => (
                             <div
@@ -131,14 +149,35 @@ function Chatbot() {
                                 <div
                                     className={`max-w-[85%] px-3 py-2 text-sm leading-relaxed ${msg.role === "user"
                                             ? "bg-[#5227FF] text-white"
-                                            : "border border-neutral-700 bg-neutral-900 text-neutral-300"
+                                            : "border border-neutral-700 bg-neutral-900 text-neutral-300 chatbot-markdown"
                                         }`}
                                 >
-                                    {msg.content}
+                                    {msg.role === "assistant" ? (
+                                        <ReactMarkdown>
+                                            {msg.content}
+                                        </ReactMarkdown>
+                                    ) : (
+                                        msg.content
+                                    )}
                                 </div>
 
                             </div>
                         ))}
+
+                        {/* QUICK QUESTIONS */}
+                        {!loading && (
+                            <div className="flex flex-wrap gap-2 pt-2">
+                                {quickQuestions.map((q, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => handleSend(q)}
+                                        className="text-left text-xs bg-neutral-800/50 border border-neutral-700 text-neutral-300 hover:bg-neutral-700 hover:text-white px-3 py-2 rounded-xl transition-colors"
+                                    >
+                                        {q}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         {/* LOADING */}
                         {loading && (
