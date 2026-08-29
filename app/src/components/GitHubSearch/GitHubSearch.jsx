@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Loader2 } from "lucide-react";
+import { fetchUserProfile } from "../../services/githubApi";
 
 function GitHubSearch() {
   const navigate = useNavigate();
@@ -23,35 +24,18 @@ function GitHubSearch() {
     setLoading(true);
 
     try {
-      console.log("Checking username:", trimmedUsername);
-
-      const response = await fetch(
-        `http://localhost:5000/api/github/${encodeURIComponent(
-          trimmedUsername
-        )}`
-      );
-
-      const result = await response.json();
-
-      console.log("Backend response:", result);
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.message || "GitHub user not found."
-        );
-      }
+      const user = await fetchUserProfile(trimmedUsername);
 
       // Username is valid → go to dashboard
       navigate(
         `/?username=${encodeURIComponent(
-          result.data.login
+          user.login
         )}`
       );
-    } catch (error) {
-      console.error("Analyze error:", error);
-
+    } catch (err) {
+      console.error("Analyze error:", err);
       setError(
-        error.message ||
+        err.message ||
           "Unable to analyze GitHub profile."
       );
     } finally {

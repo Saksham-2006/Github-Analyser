@@ -7,7 +7,23 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function LanguageChart({ data }) {
+function LanguageChart({ data = [] }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="p-10">
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-white">Top Languages</h2>
+          <p className="mt-1 text-sm text-gray-500">
+            Languages used across your repositories
+          </p>
+        </div>
+        <div className="flex h-72 items-center justify-center">
+          <p className="text-sm text-gray-600">No language data available.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-10">
 

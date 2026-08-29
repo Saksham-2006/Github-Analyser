@@ -1,17 +1,73 @@
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import Nav from "../components/Nav/Nav";
-import { useMemo, useState } from "react";
 import RepoStats from "../components/RepoStats/RepoStats";
 import RepositorySearch from "../components/RepositorySearch/RepositorySearch";
 import RepositoryCard from "../components/RepositoryCard/RepositoryCard";
-import Loader3 from "../components/Loadre3/Loader3";
 import Pattern from "../components/Pattern/Pattern";
+import Loader from "../components/Loader/Loader";
+import { fetchUserProfile, fetchUserRepositories } from "../services/githubApi";
 
 function Repos() {
+  const [searchParams] = useSearchParams();
+  const username = searchParams.get("username");
+
+  // Fetched real repository list and pre-computed stats from backend
+  const [repositories, setRepositories] = useState([]);
+  const [repoStats, setRepoStats] = useState(null);
+  const [repoUser, setRepoUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Client-side filter / sort state
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("stars");
   const [language, setLanguage] = useState("All");
   const [visibleCount, setVisibleCount] = useState(6);
-  const repositories = [
+
+  // Reset filters when username changes
+  useEffect(() => {
+    setSearch("");
+    setLanguage("All");
+    setVisibleCount(6);
+  }, [username]);
+
+  useEffect(() => {
+    if (!username) {
+      setRepositories([]);
+      setRepoStats(null);
+      setRepoUser(null);
+      setError("");
+      setLoading(false);
+      return;
+    }
+
+    const loadRepos = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        // Fetch profile and repos concurrently so Nav shows the username
+        const [reposData, profileData] = await Promise.all([
+          fetchUserRepositories(username),
+          fetchUserProfile(username).catch(() => null),
+        ]);
+        setRepositories(reposData.repositories || []);
+        setRepoStats(reposData.stats || null);
+        setRepoUser(profileData);
+      } catch (err) {
+        console.error("Repos fetch error:", err);
+        setError(err.message || "Unable to fetch repositories.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRepos();
+  }, [username]);
+
+  // Demo Fallback Repositories (shown when no username in URL)
+  const demoRepositories = [
     {
       id: 1,
       name: "github-analyzer",
@@ -125,106 +181,139 @@ function Repos() {
       topics: ["css", "landing-page", "design"],
     },
   ];
-  const languages = useMemo(() => {
-    const uniqueLanguages = repositories
-      .map((repo) => repo.language)
-      .filter(Boolean);
 
-    return ["All", ...new Set(uniqueLanguages)];
-  }, [repositories]);
+  // Use real or demo data
+  const isReal = !!username;
+  const activeRepos = isReal ? repositories : demoRepositories;
+
+  // Stats: use backend-computed stats when real, calculate from demo when not
+  const activeStats = isReal && repoStats
+    ? repoStats
+    : {
+        repositories: activeRepos.length,
+        stars: activeRepos.reduce((t, r) => t + (r.stargazers_count || 0), 0),
+        forks: activeRepos.reduce((t, r) => t + (r.forks_count || 0), 0),
+        languages: new Set(activeRepos.map((r) => r.language).filter(Boolean)).size,
+      };
+
+  // Dynamically derive language list from current repo set
+  const languages = useMemo(() => {
+    const unique = activeRepos.map((r) => r.language).filter(Boolean);
+    return ["All", ...new Set(unique)];
+  }, [activeRepos]);
+
+  // Client-side search → language filter → sort
   const filteredRepositories = useMemo(() => {
     const query = search.toLowerCase().trim();
 
-    const filtered = repositories.filter((repo) => {
+    const filtered = activeRepos.filter((repo) => {
       const matchesSearch =
+        !query ||
         repo.name.toLowerCase().includes(query) ||
-        repo.description?.toLowerCase().includes(query) ||
-        repo.language?.toLowerCase().includes(query);
+        (repo.description || "").toLowerCase().includes(query) ||
+        (repo.language || "").toLowerCase().includes(query);
 
       const matchesLanguage =
-        language === "All" ||
-        repo.language === language;
+        language === "All" || repo.language === language;
 
       return matchesSearch && matchesLanguage;
     });
+
     return [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "stars":
-          return b.stargazers_count - a.stargazers_count;
-
+          return (b.stargazers_count || 0) - (a.stargazers_count || 0);
         case "forks":
-          return b.forks_count - a.forks_count;
-
+          return (b.forks_count || 0) - (a.forks_count || 0);
         case "updated":
-          return (
-            new Date(b.updated_at) -
-            new Date(a.updated_at)
-          );
-
+          return new Date(b.updated_at) - new Date(a.updated_at);
         case "created":
-          return (
-            new Date(b.created_at) -
-            new Date(a.created_at)
-          );
-
+          return new Date(b.created_at) - new Date(a.created_at);
         case "name":
           return a.name.localeCompare(b.name);
-
         default:
           return 0;
       }
     });
-  }, [repositories, search, language, sortBy]);
-  const visibleRepositories =
-    filteredRepositories.slice(0, visibleCount);
+  }, [activeRepos, search, language, sortBy]);
 
-  const hasMore =
-    visibleCount < filteredRepositories.length;
+  const visibleRepositories = filteredRepositories.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredRepositories.length;
 
+  // ── Loading state ──────────────────────────────────────────────────────────
+  if (username && loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <Loader />
+          <p className="mt-4 text-sm text-neutral-500">
+            Loading repositories for @{username}...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Error state ────────────────────────────────────────────────────────────
+  if (username && error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center px-6">
+        <div className="text-center max-w-md">
+          <h2 className="text-xl font-medium text-white">
+            Unable to load repositories
+          </h2>
+          <p className="mt-3 text-sm text-neutral-500">{error}</p>
+          <a
+            href="/analyze"
+            className="mt-6 inline-block rounded-lg bg-[#5227FF] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#6339ff]"
+          >
+            Try Another Username
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Main render ────────────────────────────────────────────────────────────
   return (
     <div className="mx-20 border-l border-r border-neutral-700 pt-5">
       <section className="mx-10 mb-5">
-        <Nav></Nav>
-      </section>
-      <section className="border-t border-neutral-700 flex">
-        <div className=" border-r border-neutral-700 py-10 px-10 w-[50%] flex flex-col justify-center">
-          <h1 className="text-6xl font-medium text-white pb-10"> Repositories </h1>
-          <p className="text-neutral-400">Explore the projects behind this developer's activity.</p>
-        </div>
-        <div className="w-[50%]">
-          <Pattern></Pattern>
-        </div>
-      </section>
-      <section className="border-t border-neutral-700 border-b">
-        <RepoStats
-          stats={{
-            repositories: repositories.length,
-            stars: repositories.reduce(
-              (total, repo) =>
-                total + repo.stargazers_count,
-              0
-            ),
-            forks: repositories.reduce(
-              (total, repo) =>
-                total + repo.forks_count,
-              0
-            ),
-            languages: new Set(
-              repositories
-                .map((repo) => repo.language)
-                .filter(Boolean)
-            ).size,
-          }}
-        />
+        <Nav user={repoUser} />
       </section>
 
+      {/* Hero */}
+      <section className="border-t border-neutral-700 flex">
+        <div className="border-r border-neutral-700 py-10 px-10 w-[50%] flex flex-col justify-center">
+          <h1 className="text-6xl font-medium text-white pb-10">
+            Repositories
+          </h1>
+          <p className="text-neutral-400">
+            Explore the projects behind{" "}
+            {isReal ? `@${username}'s` : "this developer's"} activity.
+          </p>
+        </div>
+        <div className="w-[50%]">
+          <Pattern />
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="border-t border-neutral-700 border-b">
+        <RepoStats stats={activeStats} />
+      </section>
+
+      {/* Search + Sort */}
       <RepositorySearch
         search={search}
         setSearch={setSearch}
         sortBy={sortBy}
         setSortBy={setSortBy}
       />
+
+      {/* Language filters + cards */}
       <section className="px-10 border-b border-neutral-700 pb-10">
+
+        {/* Language filter pills */}
         <div className="mt-5 flex flex-wrap gap-2">
           {languages.map((item) => (
             <button
@@ -234,26 +323,24 @@ function Repos() {
                 setLanguage(item);
                 setVisibleCount(6);
               }}
-              className={`px-4 py-2 text-sm transition ${language === item
-                ? "bg-[#5227FF] text-white"
-                : "border border-white/10 bg-white/2 text-gray-400 hover:bg-white/5 hover:text-white"
-                }`}
+              className={`px-4 py-2 text-sm transition ${
+                language === item
+                  ? "bg-[#5227FF] text-white"
+                  : "border border-white/10 bg-white/2 text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
             >
               {item}
             </button>
           ))}
         </div>
 
+        {/* Result count */}
         <div className="mt-8 flex items-center justify-between">
           <p className="text-sm text-gray-500">
             Showing{" "}
-            <span className="text-gray-300">
-              {visibleRepositories.length}
-            </span>{" "}
+            <span className="text-gray-300">{visibleRepositories.length}</span>{" "}
             of{" "}
-            <span className="text-gray-300">
-              {filteredRepositories.length}
-            </span>{" "}
+            <span className="text-gray-300">{filteredRepositories.length}</span>{" "}
             repositories
           </p>
         </div>
@@ -262,23 +349,18 @@ function Repos() {
         {visibleRepositories.length > 0 ? (
           <div className="mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2">
             {visibleRepositories.map((repo) => (
-              <RepositoryCard
-                key={repo.id}
-                repo={repo}
-              />
+              <RepositoryCard key={repo.id || repo.name} repo={repo} />
             ))}
           </div>
         ) : (
-          /* Empty state */
+          /* Empty state — only shown when filters yield no results */
           <div className="mt-4 rounded-2xl border border-white/10 bg-[#120F17]/80 px-6 py-20 text-center">
             <h3 className="text-lg font-medium text-white">
               No repositories found
             </h3>
-
             <p className="mt-2 text-sm text-gray-500">
               Try a different search term or language filter.
             </p>
-
             <button
               type="button"
               onClick={() => {
@@ -298,18 +380,14 @@ function Repos() {
           <div className="mt-8 flex justify-center">
             <button
               type="button"
-              onClick={() =>
-                setVisibleCount((count) => count + 6)
-              }
+              onClick={() => setVisibleCount((count) => count + 6)}
               className="border border-white/10 px-6 py-3 text-sm font-medium text-gray-300 transition hover:bg-white/10 hover:text-white"
             >
               Load More
             </button>
           </div>
         )}
-
       </section>
-
     </div>
   );
 }
