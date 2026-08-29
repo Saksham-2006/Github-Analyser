@@ -9,7 +9,7 @@ function Nav({ user }) {
                 <img src={github} alt="github" width="30" className="mr-5" />
                 <h1 className="text-2xl text-white font-bold tracking-wider">GITHUB ANALYTICS</h1>
             </div>
-            <p className="text-3xl text-white font-light">{displayName}</p>
+            <p className="text-2xl underline text-white font-mono">{displayName}</p>
         </div>
     );
 }
