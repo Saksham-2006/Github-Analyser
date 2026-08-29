@@ -208,4 +208,32 @@ router.get("/:username/history", async (req, res) => {
   }
 });
 
+// 6. Compare two GitHub users
+router.get("/compare/:username1/:username2", async (req, res) => {
+  const { username1, username2 } = req.params;
+  const forceRefresh = req.query.fresh === "true";
+
+  try {
+    // Fetch both users concurrently to minimize latency
+    const [user1Data, user2Data] = await Promise.all([
+      getDashboard(username1, forceRefresh),
+      getDashboard(username2, forceRefresh)
+    ]);
+
+    // Persist to MongoDB (non-blocking)
+    persistSnapshot(user1Data);
+    persistSnapshot(user2Data);
+
+    res.json({
+      success: true,
+      data: {
+        user1: user1Data,
+        user2: user2Data
+      },
+    });
+  } catch (error) {
+    errorHandler(res, error);
+  }
+});
+
 module.exports = router;

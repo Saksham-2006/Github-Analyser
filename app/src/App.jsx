@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Activity from "./pages/Activity";
 import Repos from "./pages/Repos";
 import Analyze from "./pages/Analyze";
+import Compare from "./pages/Compare";
+import Chatbot from "./components/Chatbot/Chatbot";
 
 function App() {
   return (
@@ -16,8 +18,10 @@ function App() {
           <Route path="/activity" element={<Activity />} />
           <Route path="/repos" element={<Repos />} />
           <Route path="/analyze" element={<Analyze />} />
+          <Route path="/compare" element={<Compare />} />
         </Route>
       </Routes>
+      <Chatbot />
     </div >
 
   );

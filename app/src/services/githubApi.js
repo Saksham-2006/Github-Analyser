@@ -77,3 +77,10 @@ export async function deleteSavedProfile(username) {
   );
   return handleResponse(response);
 }
+
+export async function compareUsers(username1, username2) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/github/compare/${encodeURIComponent(username1.trim())}/${encodeURIComponent(username2.trim())}?fresh=true`
+  );
+  return handleResponse(response);
+}

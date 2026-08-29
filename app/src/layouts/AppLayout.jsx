@@ -5,6 +5,7 @@ import {
     Activity,
     Book,
     Search,
+    Users,
 } from "lucide-react";
 
 function AppLayout() {
@@ -42,6 +43,16 @@ function AppLayout() {
             onClick: () => navigate(`/activity${userQuery}`),
         },
         {
+            label: "Analyze",
+            icon: (
+                <Search
+                    size={22}
+                    className={isAnalyzeActive ? "text-white" : "text-zinc-600"}
+                />
+            ),
+            onClick: () => navigate("/analyze"),
+        },
+        {
             label: "Repos",
             icon: (
                 <Book
@@ -52,14 +63,14 @@ function AppLayout() {
             onClick: () => navigate(`/repos${userQuery}`),
         },
         {
-            label: "Analyze",
+            label: "Compare",
             icon: (
-                <Search
+                <Users
                     size={22}
-                    className={isAnalyzeActive ? "text-white" : "text-zinc-600"}
+                    className={location.pathname.startsWith("/compare") ? "text-white" : "text-zinc-600"}
                 />
             ),
-            onClick: () => navigate("/analyze"),
+            onClick: () => navigate("/compare"),
         },
     ];
 

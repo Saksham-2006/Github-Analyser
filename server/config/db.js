@@ -7,7 +7,7 @@ const connectDB = async () => {
     console.log("MongoDB connected");
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
-    process.exit(1);
+    console.warn("Server is running without MongoDB. Features like Saved Profiles and Analytics History will not work.");
   }
 };
 
