@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const Loader = () => {
+const Loader1 = () => {
   return (
     <StyledWrapper>
       <svg id="svg-global" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 94 136" height={136} width={94}>
@@ -223,4 +222,4 @@ const StyledWrapper = styled.div`
     animation-delay: 0.4s;
   }`;
 
-export default Loader;
+export default Loader1;

@@ -6,7 +6,7 @@ import RepoStats from "../components/RepoStats/RepoStats";
 import RepositorySearch from "../components/RepositorySearch/RepositorySearch";
 import RepositoryCard from "../components/RepositoryCard/RepositoryCard";
 import Pattern from "../components/Pattern/Pattern";
-import Loader from "../components/Loader/Loader";
+import Loader from "../components/Loader1/Loader1";
 import { fetchUserProfile, fetchUserRepositories } from "../services/githubApi";
 
 function Repos() {
@@ -354,7 +354,7 @@ function Repos() {
           </div>
         ) : (
           /* Empty state — only shown when filters yield no results */
-          <div className="mt-4 rounded-2xl border border-white/10 bg-[#120F17]/80 px-6 py-20 text-center">
+          <div className="mt-4 border border-white/10 bg-[#0f0f0f] px-10 py-20 text-center">
             <h3 className="text-lg font-medium text-white">
               No repositories found
             </h3>
@@ -368,7 +368,7 @@ function Repos() {
                 setLanguage("All");
                 setVisibleCount(6);
               }}
-              className="mt-5 rounded-lg bg-white/5 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/10 hover:text-white"
+              className="mt-5 border border-neutral-700 bg-white/5 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/10 hover:text-white"
             >
               Clear filters
             </button>

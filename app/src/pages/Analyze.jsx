@@ -116,8 +116,8 @@ function Analyze() {
       {/* ── Saved Profiles ── */}
       <section className="border-b border-neutral-700 p-10">
         <div className="flex items-center gap-2 mb-6">
-          <Bookmark size={16} className="text-[#5227FF]" />
-          <p className="text-xs uppercase tracking-widest text-neutral-500">
+          <Bookmark size={22} className="text-[#5227FF]" />
+          <p className="text-md uppercase tracking-widest text-white">
             Saved Profiles
           </p>
         </div>
@@ -135,7 +135,7 @@ function Analyze() {
             {savedProfiles.map((p) => (
               <div
                 key={p.username}
-                className="relative flex items-center gap-4 rounded-xl border border-neutral-800 bg-neutral-900/60 px-5 py-4 transition hover:border-neutral-700"
+                className="relative flex items-center gap-4 border border-neutral-800 bg-neutral-900/60 px-5 py-4 transition hover:border-neutral-700"
               >
                 {/* Avatar */}
                 <img
@@ -157,7 +157,7 @@ function Analyze() {
                 {/* Analyze button */}
                 <button
                   onClick={() => handleAnalyze(p.username)}
-                  className="shrink-0 rounded-lg border border-[#5227FF]/40 bg-[#5227FF]/10 px-3 py-1.5 text-xs font-medium text-[#5227FF] transition hover:bg-[#5227FF]/20"
+                  className="shrink-0 border border-[#5227FF]/40 bg-[#5227FF]/10 px-3 py-1.5 text-xs font-medium text-[#5227FF] transition hover:bg-[#5227FF]/20"
                 >
                   Analyze
                 </button>
@@ -166,7 +166,7 @@ function Analyze() {
                 <button
                   onClick={() => handleDelete(p.username)}
                   title="Remove"
-                  className="absolute top-3 right-3 text-neutral-700 transition hover:text-rose-400"
+                  className="absolute top-1 right-1 text-neutral-700 transition hover:text-rose-400"
                 >
                   <X size={14} />
                 </button>

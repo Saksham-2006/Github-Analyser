@@ -12,7 +12,7 @@ function RepositorySearch({
       {/* Search */}
       <div className="relative flex-1">
         <Search
-          size={18}
+          size={22}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
         />
 
@@ -21,7 +21,7 @@ function RepositorySearch({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search repositories..."
-          className="h-12 w-full border border-neutral-700 pl-11 pr-10 text-sm text-white outline-none backdrop-blur-md transition placeholder:text-gray-600 focus:border-[#5227FF]/60"
+          className="h-12 w-full border border-neutral-700 pl-11 pr-10 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-[#5227FF]/60"
         />
 
         {/* Clear search */}
@@ -47,13 +47,13 @@ function RepositorySearch({
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="h-12 w-full appearance-none border border-neutral-700 pl-11 pr-10 text-sm text-gray-300 outline-none backdrop-blur-md transition focus:border-[#5227FF]/60 sm:w-52"
+          className="h-12 w-full appearance-none border border-neutral-700 pl-11 pr-10 text-sm text-gray-300 outline-none transition focus:border-[#5227FF]/60 sm:w-52"
         >
-          <option value="stars">Most Stars</option>
-          <option value="forks">Most Forks</option>
-          <option value="updated">Recently Updated</option>
-          <option value="created">Recently Created</option>
-          <option value="name">Name</option>
+          <option value="stars" className="bg-[#0f0f0f]">Most Stars</option>
+          <option value="forks" className="bg-[#0f0f0f]">Most Forks</option>
+          <option value="updated" className="bg-[#0f0f0f]">Recently Updated</option>
+          <option value="created" className="bg-[#0f0f0f]">Recently Created</option>
+          <option value="name" className="bg-[#0f0f0f]">Name</option>
         </select>
 
         {/* Dropdown arrow */}

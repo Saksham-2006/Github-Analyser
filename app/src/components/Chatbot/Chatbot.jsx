@@ -7,7 +7,7 @@ import {
     Loader2,
     Bot,
 } from "lucide-react";
-
+import github from "../../assets/github.svg";
 function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState("");
@@ -104,14 +104,14 @@ function Chatbot() {
         <>
             {/* CHAT WINDOW */}
             {isOpen && (
-                <div className="fixed bottom-24 right-6 z-50 flex h-[500px] w-[380px] flex-col overflow-hidden border border-neutral-700 bg-[#0d0d0f] shadow-2xl">
+                <div className="fixed bottom-20 right-6 z-50 flex h-[500px] w-[380px] flex-col overflow-hidden border border-neutral-700 bg-[#0d0d0f] shadow-2xl">
 
                     {/* HEADER */}
                     <div className="flex items-center justify-between border-b border-neutral-700 px-4 py-3">
 
                         <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#5227FF]">
-                                <Bot size={18} className="text-white" />
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full">
+                                <img src={github} alt="" />
                             </div>
 
                             <div>
@@ -229,7 +229,7 @@ function Chatbot() {
             {/* FLOATING BUTTON */}
             <button
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#5227FF] text-white shadow-lg transition hover:scale-105 hover:bg-[#6339ff]"
+                className="fixed bottom-2 right-6 z-50 flex h-13 w-13 items-center justify-center bg-[#5227FF] text-white shadow-lg transition hover:scale-105 hover:bg-[#6339ff] rounded-md"
                 aria-label="Open GitHub AI"
             >
                 {isOpen ? (

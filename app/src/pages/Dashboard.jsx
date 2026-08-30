@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Nav from "../components/Nav/Nav";
-import Loader from "../components/Loader/Loader";
+import Loader1 from "../components/Loader1/Loader1";
+import Loader from "../components/Loader/Loader"
 import ProfileCard from "../components/ProfileCard/ProfileCard";
 import StatCard from "../components/StatCard/StatCard";
 import LanguageChart from "../components/LanguageChart/LanguageChart";
@@ -110,7 +111,7 @@ function Dashboard() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <Loader />
+          <Loader1 />
           <p className="mt-4 text-sm text-neutral-500">
             Analyzing @{username}...
           </p>
