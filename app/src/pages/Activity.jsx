@@ -8,7 +8,7 @@ import CommitActivityChart from "../components/CommitActivityChart/CommitActivit
 import MostActiveDays from "../components/MostActiveDays/MostActiveDays";
 import ActivityByWeek from "../components/ActivityByWeek/ActivityByWeek";
 import Loader2 from "../components/Loader2/Loader2";
-import Loader from "../components/Loader/Loader";
+import Loader1 from "../components/Loader1/Loader1";
 import { fetchUserDashboard } from "../services/githubApi";
 
 function Activity() {
@@ -94,15 +94,13 @@ function Activity() {
 
   const stats = isReal
     ? {
-        repositories: realData.stats.repositories,
-        totalCommits: realData.stats.totalCommits.toLocaleString(),
-        currentStreak: `${realData.stats.currentStreak} day${
-          realData.stats.currentStreak === 1 ? "" : "s"
+      repositories: realData.stats.repositories,
+      totalCommits: realData.stats.totalCommits.toLocaleString(),
+      currentStreak: `${realData.stats.currentStreak} day${realData.stats.currentStreak === 1 ? "" : "s"
         }`,
-        longestStreak: `${realData.stats.longestStreak} day${
-          realData.stats.longestStreak === 1 ? "" : "s"
+      longestStreak: `${realData.stats.longestStreak} day${realData.stats.longestStreak === 1 ? "" : "s"
         }`,
-      }
+    }
     : demoStats;
 
   const contributions = isReal ? realData.contributions : demoContributions;
@@ -116,7 +114,7 @@ function Activity() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <Loader />
+          <Loader1 />
           <p className="mt-4 text-sm text-neutral-500">
             Analyzing activity for @{username}...
           </p>
