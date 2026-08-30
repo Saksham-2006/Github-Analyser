@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import GetStarted from "../components/GetStarted/GetStarted.jsx"
 import Nav from "../components/Nav/Nav";
 import Loader1 from "../components/Loader1/Loader1";
 import Loader from "../components/Loader/Loader"
@@ -13,13 +14,17 @@ import DeveloperProgress from "../components/DeveloperProgress/DeveloperProgress
 import { fetchUserDashboard } from "../services/githubApi";
 
 function Dashboard() {
+  const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const username = searchParams.get("username");
 
   const [realDashboard, setRealDashboard] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const handleClick = () => {
+    navigate("/analyze");
+  };
   useEffect(() => {
     if (!username) {
       setRealDashboard(null);
@@ -92,15 +97,13 @@ function Dashboard() {
   const user = isReal ? realDashboard.profile : demoUser;
   const stats = isReal
     ? {
-        repositories: realDashboard.stats.repositories,
-        totalCommits: realDashboard.stats.totalCommits.toLocaleString(),
-        currentStreak: `${realDashboard.stats.currentStreak} day${
-          realDashboard.stats.currentStreak === 1 ? "" : "s"
+      repositories: realDashboard.stats.repositories,
+      totalCommits: realDashboard.stats.totalCommits.toLocaleString(),
+      currentStreak: `${realDashboard.stats.currentStreak} day${realDashboard.stats.currentStreak === 1 ? "" : "s"
         }`,
-        longestStreak: `${realDashboard.stats.longestStreak} day${
-          realDashboard.stats.longestStreak === 1 ? "" : "s"
+      longestStreak: `${realDashboard.stats.longestStreak} day${realDashboard.stats.longestStreak === 1 ? "" : "s"
         }`,
-      }
+    }
     : demoStats;
 
   const languages = isReal ? realDashboard.languages : demoLanguages;
@@ -159,6 +162,9 @@ function Dashboard() {
                   your commits, contribution patterns, coding streaks,
                   repositories, and top languages — all in one clean dashboard.
                 </p>
+                <div className="pt-6">
+                  <GetStarted onClick={handleClick} />
+                </div>
               </div>
 
               <div className="flex justify-center items-center w-[50%] py-10">
