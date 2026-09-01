@@ -75,8 +75,8 @@ function AppLayout() {
     ];
 
     return (
-        <div className="min-h-screen">
-            <main>
+        <div className="min-h-screen min-w-0">
+            <main className="min-w-0">
                 <Outlet />
             </main>
 

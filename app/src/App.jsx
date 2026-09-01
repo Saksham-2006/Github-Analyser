@@ -11,7 +11,7 @@ import Chatbot from "./components/Chatbot/Chatbot";
 
 function App() {
   return (
-    < div className="relative z-10" >
+    <div className="relative z-10 min-w-0">
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Dashboard />} />
@@ -22,7 +22,7 @@ function App() {
         </Route>
       </Routes>
       <Chatbot />
-    </div >
+    </div>
 
   );
 }

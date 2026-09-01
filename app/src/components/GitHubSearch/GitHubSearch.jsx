@@ -47,14 +47,14 @@ function GitHubSearch() {
     <div className="w-full">
       <form onSubmit={handleSubmit}>
         <div
-          className={`flex items-center border p-2 backdrop-blur-md transition ${
+          className={`flex items-center border p-1.5 sm:p-2 backdrop-blur-md transition ${
             error
               ? "border-red-500/40"
               : "border-white/10 focus-within:border-[#5227FF]/60"
           }`}
         >
           {/* Search icon */}
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center">
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center">
             <Search
               size={20}
               className="text-gray-500"
@@ -74,14 +74,14 @@ function GitHubSearch() {
             }}
             placeholder="Enter GitHub username..."
             disabled={loading}
-            className="h-12 min-w-0 flex-1 bg-transparent px-2 text-sm text-white outline-none placeholder:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-10 sm:h-12 min-w-0 flex-1 bg-transparent px-1 sm:px-2 text-sm text-white outline-none placeholder:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
           />
 
           {/* Button */}
           <button
             type="submit"
             disabled={loading}
-            className="flex h-12 shrink-0 items-center gap-2 bg-[#5227FF] px-5 text-sm font-medium text-white transition hover:bg-[#6339ff] disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex h-10 sm:h-12 shrink-0 items-center gap-1 sm:gap-2 bg-[#5227FF] px-3 sm:px-5 text-sm font-medium text-white transition hover:bg-[#6339ff] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? (
               <>

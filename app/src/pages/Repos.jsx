@@ -276,15 +276,14 @@ function Repos() {
 
   // ── Main render ────────────────────────────────────────────────────────────
   return (
-    <div className="mx-20 border-l border-r border-neutral-700 pt-5">
-      <section className="mx-10 mb-5">
+    <div className="mx-0 sm:mx-6 lg:mx-20 border-l border-r border-neutral-700 pt-5">
+      <section className="mx-4 sm:mx-6 lg:mx-10 mb-5">
         <Nav user={repoUser} />
       </section>
 
-      {/* Hero */}
-      <section className="border-t border-neutral-700 flex">
-        <div className="border-r border-neutral-700 py-10 px-10 w-[50%] flex flex-col justify-center">
-          <h1 className="text-6xl font-medium text-white pb-10">
+      <section className="border-t border-neutral-700 flex flex-col lg:flex-row">
+        <div className="border-b lg:border-b-0 lg:border-r border-neutral-700 py-8 px-4 sm:py-10 sm:px-6 lg:px-10 w-full lg:w-1/2 flex flex-col justify-center">
+          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-medium text-white pb-6 lg:pb-10">
             Repositories
           </h1>
           <p className="text-neutral-400">
@@ -292,7 +291,7 @@ function Repos() {
             {isReal ? `@${username}'s` : "this developer's"} activity.
           </p>
         </div>
-        <div className="w-[50%]">
+        <div className="w-full lg:w-1/2 min-w-0">
           <Pattern />
         </div>
       </section>
@@ -311,7 +310,7 @@ function Repos() {
       />
 
       {/* Language filters + cards */}
-      <section className="px-10 border-b border-neutral-700 pb-10">
+      <section className="px-4 sm:px-6 lg:px-10 border-b border-neutral-700 pb-10">
 
         {/* Language filter pills */}
         <div className="mt-5 flex flex-wrap gap-2">
@@ -354,7 +353,7 @@ function Repos() {
           </div>
         ) : (
           /* Empty state — only shown when filters yield no results */
-          <div className="mt-4 border border-white/10 bg-[#0f0f0f] px-10 py-20 text-center">
+          <div className="mt-4 border border-white/10 bg-[#0f0f0f] px-4 sm:px-10 py-12 sm:py-20 text-center">
             <h3 className="text-lg font-medium text-white">
               No repositories found
             </h3>

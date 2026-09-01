@@ -146,15 +146,15 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col items-center">
-        <div className="mx-20 border-l border-r border-neutral-700 pt-5">
-          <section className="mx-10 mb-5">
+      <div>
+        <div className="mx-0 sm:mx-6 lg:mx-20 border-l border-r border-neutral-700 pt-5">
+          <section className="mx-4 sm:mx-6 lg:mx-10 mb-5">
             <Nav user={isReal ? user : null} />
           </section>
           <section className="border-t border-neutral-700">
-            <div className="flex">
-              <div className="w-[50%] border-r border-neutral-700 py-10 px-10">
-                <h1 className="text-6xl font-medium text-white pb-10">
+            <div className="flex flex-col lg:flex-row">
+              <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-neutral-700 py-8 px-4 sm:py-10 sm:px-6 lg:px-10">
+                <h1 className="text-3xl sm:text-4xl lg:text-6xl font-medium text-white pb-6 lg:pb-10">
                   Understand your GitHub activity at a glance.
                 </h1>
                 <p className="text-neutral-400">
@@ -167,7 +167,7 @@ function Dashboard() {
                 </div>
               </div>
 
-              <div className="flex justify-center items-center w-[50%] py-10">
+              <div className="flex justify-center items-center w-full lg:w-1/2 py-8 lg:py-10">
                 <Loader />
               </div>
             </div>
@@ -203,20 +203,21 @@ function Dashboard() {
             </div>
           </section>
 
-          {/* Developer Progress — only visible when real data is loaded */}
           {isReal && <DeveloperProgress username={username} />}
-          <section className="border-t border-b border-neutral-700 flex">
-            <div className="w-[50%] border-r border-neutral-700">
+          <section className="border-t border-b border-neutral-700 flex flex-col lg:flex-row">
+            <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-neutral-700 min-w-0">
               <LanguageChart data={languages} />
             </div>
-            <div className="w-[50%]">
+            <div className="w-full lg:w-1/2 min-w-0">
               <RecentActivity data={activity} />
             </div>
           </section>
         </div>
-        <section className="w-[50%] border-l border-b border-r border-neutral-700 flex">
-          <ContributionGrid data={contributions} />
-        </section>
+        <div className="flex justify-center">
+          <section className="w-full sm:w-[70%] lg:w-[50%] border-l border-b border-r border-neutral-700 flex min-w-0">
+            <ContributionGrid data={contributions} />
+          </section>
+        </div>
       </div>
     </>
   );

@@ -10,7 +10,7 @@ import {
 
 function RecentActivity({ data }) {
   return (
-    <div className="p-10 backdrop-blur-md">
+    <div className="p-4 sm:p-6 lg:p-10 backdrop-blur-md">
 
       {/* Header */}
       <div className="mb-6">

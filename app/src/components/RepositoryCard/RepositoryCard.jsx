@@ -7,7 +7,7 @@ import {
 
 function RepositoryCard({ repo }) {
   return (
-    <div className="group flex h-full flex-col border border-neutral-700 p-10 backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:border-white/20">
+    <div className="group flex h-full flex-col border border-neutral-700 p-5 sm:p-8 lg:p-10 backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:border-white/20 min-w-0">
 
       {/* Top */}
       <div className="flex items-start justify-between gap-4">

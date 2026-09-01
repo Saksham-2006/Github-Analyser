@@ -143,14 +143,14 @@ function Activity() {
   }
 
   return (
-    <div className="mx-20 border-l border-r border-neutral-700 pt-5">
-      <section className="mx-10 mb-5">
+    <div className="mx-0 sm:mx-6 lg:mx-20 border-l border-r border-neutral-700 pt-5">
+      <section className="mx-4 sm:mx-6 lg:mx-10 mb-5">
         <Nav user={user} />
       </section>
       <section className="border-t border-neutral-700">
-        <div className="flex">
-          <div className="w-[50%] border-r border-neutral-700 py-10 px-10">
-            <h1 className="text-6xl font-medium text-white pb-10">
+        <div className="flex flex-col lg:flex-row">
+          <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-neutral-700 py-8 px-4 sm:py-10 sm:px-6 lg:px-10">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-medium text-white pb-6 lg:pb-10">
               Activity
             </h1>
             <p className="text-neutral-400">
@@ -158,7 +158,7 @@ function Activity() {
               contribution patterns
             </p>
           </div>
-          <div className="w-[50%] p-10 flex justify-center items-center">
+          <div className="w-full lg:w-1/2 p-6 sm:p-10 flex justify-center items-center">
             <Loader2 />
           </div>
         </div>
@@ -190,17 +190,17 @@ function Activity() {
           />
         </div>
       </section>
-      <section className="border-neutral-700 border-t">
+      <section className="border-neutral-700 border-t min-w-0">
         <ContributionGrid data={contributions} />
       </section>
-      <section className="border-neutral-700 flex border-t">
+      <section className="border-neutral-700 flex border-t min-w-0">
         <CommitActivityChart data={commitData} />
       </section>
-      <section className="border-neutral-700 flex border-t border-b">
-        <div className="w-[50%] border-r border-neutral-700">
+      <section className="border-neutral-700 flex flex-col lg:flex-row border-t border-b">
+        <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-neutral-700 min-w-0">
           <MostActiveDays data={activeDays} />
         </div>
-        <div className="w-[50%]">
+        <div className="w-full lg:w-1/2 min-w-0">
           <ActivityByWeek data={weeklyActivity} />
         </div>
       </section>

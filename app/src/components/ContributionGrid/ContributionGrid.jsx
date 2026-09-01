@@ -34,10 +34,9 @@ function ContributionGrid({ data = [], weeks = 20 }) {
   };
 
   return (
-    <div className="w-full flex justify-between p-10 backdrop-blur-md">
+    <div className="w-full flex flex-col sm:flex-row sm:justify-between p-4 sm:p-6 lg:p-10 backdrop-blur-md min-w-0">
 
-      {/* Header */}
-      <div>
+      <div className="min-w-0 w-full">
 
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-white">
@@ -49,7 +48,6 @@ function ContributionGrid({ data = [], weeks = 20 }) {
           </p>
         </div>
 
-        {/* Grid */}
         <div className="w-full overflow-x-auto">
           <div className="flex min-w-max gap-1">
 
@@ -78,8 +76,7 @@ function ContributionGrid({ data = [], weeks = 20 }) {
         </div>
 
       </div>
-      {/* Legend */}
-      <div className="mt-5 flex justify-end gap-2 text-xs items-end text-gray-500">
+      <div className="mt-5 flex justify-start sm:justify-end gap-2 text-xs items-end text-gray-500 shrink-0 sm:pl-4">
         <span>Less</span>
 
         <div className="h-3 w-3 rounded-sm bg-white/5" />

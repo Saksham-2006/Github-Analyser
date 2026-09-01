@@ -21,8 +21,8 @@ function FeatureCard({
             </div>
 
             {/* Content */}
-            <div className="flex justify-between items-center">
-                <div className="mt-5">
+            <div className="flex justify-between items-start gap-3">
+                <div className="mt-5 min-w-0">
                     <h3 className="text-base font-medium text-white">
                         {title}
                     </h3>

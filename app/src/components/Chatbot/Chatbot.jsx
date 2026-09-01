@@ -104,7 +104,7 @@ function Chatbot() {
         <>
             {/* CHAT WINDOW */}
             {isOpen && (
-                <div className="fixed bottom-20 right-6 z-50 flex h-[500px] w-[380px] flex-col overflow-hidden border border-neutral-700 bg-[#0d0d0f] shadow-2xl">
+                <div className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 z-50 flex h-[min(500px,70vh)] w-auto sm:w-[380px] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden border border-neutral-700 bg-[#0d0d0f] shadow-2xl">
 
                     {/* HEADER */}
                     <div className="flex items-center justify-between border-b border-neutral-700 px-4 py-3">
@@ -147,7 +147,7 @@ function Chatbot() {
                             >
 
                                 <div
-                                    className={`max-w-[85%] px-3 py-2 text-sm leading-relaxed ${msg.role === "user"
+                                    className={`max-w-[85%] px-3 py-2 text-sm leading-relaxed break-words ${msg.role === "user"
                                             ? "bg-[#5227FF] text-white"
                                             : "border border-neutral-700 bg-neutral-900 text-neutral-300 chatbot-markdown"
                                         }`}
@@ -229,7 +229,7 @@ function Chatbot() {
             {/* FLOATING BUTTON */}
             <button
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="fixed bottom-2 right-6 z-50 flex h-13 w-13 items-center justify-center bg-[#5227FF] text-white shadow-lg transition hover:scale-105 hover:bg-[#6339ff] rounded-md"
+                className="fixed bottom-2 right-3 sm:right-6 z-50 flex h-13 w-13 items-center justify-center bg-[#5227FF] text-white shadow-lg transition hover:scale-105 hover:bg-[#6339ff] rounded-md"
                 aria-label="Open GitHub AI"
             >
                 {isOpen ? (

@@ -51,7 +51,7 @@ function ProfileCard({ user }) {
   const isSaving = saveState === "saving";
 
   return (
-    <div className="p-10">
+    <div className="p-4 sm:p-6 lg:p-10">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
 
         {/* Avatar */}
@@ -65,7 +65,7 @@ function ProfileCard({ user }) {
         <div className="min-w-0 flex-1">
 
           <div className="flex flex-wrap items-center gap-3">
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-xl sm:text-2xl font-semibold text-white break-words">
               {user.name || user.login}
             </h2>
 
@@ -114,7 +114,7 @@ function ProfileCard({ user }) {
         </div>
 
         {/* Action buttons */}
-        <div className="flex shrink-0 gap-2">
+        <div className="flex shrink-0 flex-wrap gap-2">
           {/* Save / Saved / Unsave button */}
           {user.id && (
             isSaved ? (

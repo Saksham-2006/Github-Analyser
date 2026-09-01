@@ -47,14 +47,14 @@ function Analyze() {
   };
 
   return (
-    <div className="mx-20 border-l border-r border-neutral-700 pt-5">
-      <section className="mx-10 mb-5">
+    <div className="mx-0 sm:mx-6 lg:mx-20 border-l border-r border-neutral-700 pt-5">
+      <section className="mx-4 sm:mx-6 lg:mx-10 mb-5">
         <Nav></Nav>
       </section>
       <section className="border-t border-neutral-700">
-        <div className="flex">
-          <div className="w-[50%] border-r border-neutral-700 py-10 px-10">
-            <h1 className="text-6xl font-medium text-white pb-10">
+        <div className="flex flex-col lg:flex-row">
+          <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-neutral-700 py-8 px-4 sm:py-10 sm:px-6 lg:px-10">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-medium text-white pb-6 lg:pb-10">
               {" "}
               Analyze GitHub activity{" "}
             </h1>
@@ -63,12 +63,12 @@ function Analyze() {
               streaks, repositories, and programming languages.
             </p>
           </div>
-          <div className="w-[50%] p-10 flex justify-center items-center pb-20">
+          <div className="w-full lg:w-1/2 p-6 sm:p-10 flex justify-center items-center pb-12 lg:pb-20">
             <Loader3></Loader3>
           </div>
         </div>
       </section>
-      <section className="border-t border-neutral-700 p-10">
+      <section className="border-t border-neutral-700 p-4 sm:p-6 lg:p-10">
         <GitHubSearch />
         <div className="pt-10">
           <TrueFocus
@@ -81,7 +81,7 @@ function Analyze() {
           />
         </div>
       </section>
-      <section className="border-t border-neutral-700 p-10 border-b">
+      <section className="border-t border-neutral-700 p-4 sm:p-6 lg:p-10 border-b">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <FeatureCard
             icon={<Activity size={30} />}
@@ -114,7 +114,7 @@ function Analyze() {
       </section>
 
       {/* ── Saved Profiles ── */}
-      <section className="border-b border-neutral-700 p-10">
+      <section className="border-b border-neutral-700 p-4 sm:p-6 lg:p-10">
         <div className="flex items-center gap-2 mb-6">
           <Bookmark size={22} className="text-[#5227FF]" />
           <p className="text-md uppercase tracking-widest text-white">

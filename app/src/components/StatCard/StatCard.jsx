@@ -7,7 +7,7 @@ function StatCard({
 }) {
   return (
     <div
-      className={`p-10 backdrop-blur-md border-r border-neutral-700 ${className}`}
+      className={`p-6 sm:p-8 lg:p-10 backdrop-blur-md border-r border-neutral-700 ${className}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between">

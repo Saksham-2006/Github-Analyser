@@ -10,7 +10,7 @@ import {
 function LanguageChart({ data = [] }) {
   if (!data || data.length === 0) {
     return (
-      <div className="p-10">
+      <div className="p-4 sm:p-6 lg:p-10">
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-white">Top Languages</h2>
           <p className="mt-1 text-sm text-gray-500">
@@ -25,7 +25,7 @@ function LanguageChart({ data = [] }) {
   }
 
   return (
-    <div className="p-10">
+    <div className="p-4 sm:p-6 lg:p-10">
 
       {/* Header */}
       <div className="mb-6">

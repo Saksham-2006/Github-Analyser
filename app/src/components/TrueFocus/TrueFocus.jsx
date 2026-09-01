@@ -73,7 +73,7 @@ const TrueFocus = ({
             ref={el => {
               wordRefs.current[index] = el;
             }}
-            className="relative text-[3rem] font-black cursor-pointer text-white"
+            className="relative text-xl sm:text-3xl lg:text-[3rem] font-black cursor-pointer text-white"
             style={{
               filter: manualMode
                 ? isActive

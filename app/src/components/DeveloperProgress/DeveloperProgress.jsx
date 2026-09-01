@@ -45,7 +45,7 @@ function DeveloperProgress({ username }) {
   // Need at least 2 snapshots to show progress
   if (history.length < 2) {
     return (
-      <div className="border-t border-neutral-700 px-10 py-8">
+      <div className="border-t border-neutral-700 px-4 sm:px-6 lg:px-10 py-8">
         <p className="text-xs uppercase tracking-widest text-neutral-500 mb-3">
           Developer Progress
         </p>
@@ -60,7 +60,7 @@ function DeveloperProgress({ username }) {
   const previous = history[1]; // second newest
 
   return (
-    <div className="border-t border-neutral-700 px-10 py-8">
+    <div className="border-t border-neutral-700 px-4 sm:px-6 lg:px-10 py-8">
       <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1">
         Developer Progress
       </p>

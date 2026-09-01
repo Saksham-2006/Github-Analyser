@@ -10,7 +10,7 @@ import {
 
 function CommitActivityChart({ data = [] }) {
   return (
-    <div className="w-full p-10 backdrop-blur-md">
+    <div className="w-full p-4 sm:p-6 lg:p-10 backdrop-blur-md min-w-0">
       
       {/* Header */}
       <div className="mb-6">

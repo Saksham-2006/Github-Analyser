@@ -402,7 +402,7 @@ function Compare() {
   // ============================================================
 
   return (
-    <div className="mx-4 min-h-screen border-x border-b border-neutral-700 sm:mx-20">
+    <div className="mx-0 sm:mx-6 lg:mx-20 min-h-screen border-x border-b border-neutral-700">
 
       {/* ======================================================== */}
       {/* NAVIGATION */}
@@ -420,8 +420,8 @@ function Compare() {
 
         <div className="flex flex-col border-b border-neutral-700 lg:flex-row">
 
-          <div className="w-full border-b border-neutral-700 px-6 py-10 sm:px-10 lg:w-1/2 lg:border-b-0 lg:border-r">
-            <h1 className="mb-4 text-4xl font-medium text-white sm:text-5xl lg:text-6xl">
+          <div className="w-full border-b border-neutral-700 px-4 py-8 sm:px-10 sm:py-10 lg:w-1/2 lg:border-b-0 lg:border-r">
+            <h1 className="mb-4 text-3xl font-medium text-white sm:text-5xl lg:text-6xl">
               Compare GitHub Developers
             </h1>
 
@@ -446,7 +446,7 @@ function Compare() {
 
           <form
             onSubmit={handleCompare}
-            className="mx-auto w-full max-w-4xl px-6 py-10 sm:px-10"
+            className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-10 sm:py-10"
           >
 
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
@@ -632,7 +632,7 @@ function Compare() {
 
         {comparisonData &&
           !loading && (
-            <div className="w-full p-6 sm:p-10">
+                            <div className="w-full p-4 sm:p-6 lg:p-10">
 
               {/* ================================================= */}
               {/* TOP ROW - 4 COLUMNS */}
@@ -680,7 +680,7 @@ function Compare() {
                 {/* COMPARISON STATISTICS */}
                 {/* =============================================== */}
 
-                <div className="w-full border border-neutral-800 bg-neutral-900/20 p-6 sm:p-8">
+                <div className="w-full border border-neutral-800 bg-neutral-900/20 p-4 sm:p-8 overflow-x-auto">
 
                   <h4 className="mb-6 text-center text-lg font-medium text-white">
                     Comparison Statistics
@@ -839,7 +839,7 @@ function Compare() {
                 {/* PERFORMANCE RADAR */}
                 {/* =============================================== */}
 
-                <div className="flex min-h-[600px] w-full flex-col border border-neutral-800 bg-neutral-900/20 p-6 sm:p-8">
+                <div className="flex min-h-[420px] sm:min-h-[500px] lg:min-h-[600px] w-full flex-col border border-neutral-800 bg-neutral-900/20 p-4 sm:p-8">
 
                   <h4 className="mb-6 text-center text-lg font-medium text-white">
                     Performance Radar
@@ -847,7 +847,7 @@ function Compare() {
 
                   <div className="flex min-h-0 flex-1 items-center justify-center">
 
-                    <div className="h-[450px] w-full">
+                    <div className="h-[280px] sm:h-[360px] lg:h-[450px] w-full">
 
                       <ResponsiveContainer
                         width="100%"

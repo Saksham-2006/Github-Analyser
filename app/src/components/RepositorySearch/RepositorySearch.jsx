@@ -7,7 +7,7 @@ function RepositorySearch({
   setSortBy,
 }) {
   return (
-    <div className="flex w-full flex-col gap-3 sm:flex-row p-10">
+    <div className="flex w-full flex-col gap-3 sm:flex-row p-4 sm:p-6 lg:p-10">
 
       {/* Search */}
       <div className="relative flex-1">
